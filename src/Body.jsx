@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import Dropdown from "./Dropdown";
-import Shimmer from "./Shimmer";
+import ShimmerCard from "./ShimmerCard";
 
 let Body = () => {
   async function fetchCountries() {
@@ -24,18 +24,19 @@ let Body = () => {
       );
     });
   }
+  let [initialState, setInitialState] = useState(true);
   //   console.log(searchText);
   useEffect(() => {
     fetchCountries().then((data) => {
       setCountryData(data);
       setFilterCountryData(data);
+      setInitialState(false);
     });
   }, []);
-  let bodyStyle = { margin: "0 3rem" };
+  let bodyStyle = { margin: "3rem" };
   let searchStyle = { width: "35%" };
-  return filterCountryData.length === 0 ? (
-    <Shimmer />
-  ) : (
+
+  return (
     <div className="body" style={bodyStyle}>
       <div className="filter-class mt-5  d-flex justify-content-between py-auto">
         <div className="search" style={searchStyle}>
@@ -77,9 +78,26 @@ let Body = () => {
         />
       </div>
       <div className="restCountries row ">
-        {filterCountryData.map((obj) => {
-          return <EachCard country={obj} />;
-        })}
+        {filterCountryData.length === 0 ? (
+          initialState === true ? (
+            <div className="row">
+              <ShimmerCard />
+              <ShimmerCard />
+              <ShimmerCard />
+              <ShimmerCard />
+              <ShimmerCard />
+              <ShimmerCard />
+              <ShimmerCard />
+              <ShimmerCard />
+            </div>
+          ) : (
+            <h1 className="m-5">No data found</h1>
+          )
+        ) : (
+          filterCountryData.map((obj) => {
+            return <EachCard country={obj} />;
+          })
+        )}
       </div>
     </div>
   );

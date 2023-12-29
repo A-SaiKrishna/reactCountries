@@ -1,6 +1,16 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { DarkMode } from "./main";
 
 let Dropdown = ({ regionData }) => {
+  let darkValue = useContext(DarkMode);
+  let darkStyle = {
+    backgroundColor: "white",
+    color: "hsl(200, 15%, 8%)",
+  };
+  if (darkValue === "dark") {
+    darkStyle.backgroundColor = "hsl(209, 23%, 22%)";
+    darkStyle.color = "white";
+  }
   let [styObj, setStyObj] = useState({
     display: "none",
   });
@@ -8,8 +18,8 @@ let Dropdown = ({ regionData }) => {
   return (
     <div className="drop z-1" style={Style}>
       <button
-        className="btn-primary border-0 shadow bg-white"
-        style={{ height: "3rem", width: "100%" }}
+        className="btn-primary border-0 shadow "
+        style={{ height: "3rem", width: "100%", ...darkStyle }}
         onClick={() => {
           if (styObj.display === "block") {
             setStyObj({ display: "none" });
@@ -22,25 +32,40 @@ let Dropdown = ({ regionData }) => {
       </button>
       <div
         className="list bg-white "
-        style={{ width: "100%" }}
+        style={{ width: "100%", ...darkStyle }}
         onClick={(e) => {
           //   console.log(e.target.innerHTML);
           regionData(e.target.innerHTML);
         }}
       >
-        <a className="ms-4 text-dark text-decoration-none" style={styObj}>
+        <a
+          className="ps-4  text-decoration-none"
+          style={{ ...styObj, ...darkStyle }}
+        >
           Africa
         </a>
-        <a className="ms-4 text-dark text-decoration-none" style={styObj}>
+        <a
+          className="ps-4  text-decoration-none"
+          style={{ ...styObj, ...darkStyle }}
+        >
           Americas
         </a>
-        <a className="ms-4 text-dark text-decoration-none" style={styObj}>
+        <a
+          className="ps-4  text-decoration-none"
+          style={{ ...styObj, ...darkStyle }}
+        >
           Asia
         </a>
-        <a className="ms-4 text-dark text-decoration-none" style={styObj}>
+        <a
+          className="ps-4  text-decoration-none"
+          style={{ ...styObj, ...darkStyle }}
+        >
           Europe
         </a>
-        <a className="ms-4 text-dark text-decoration-none" style={styObj}>
+        <a
+          className="ps-4  text-decoration-none"
+          style={{ ...styObj, ...darkStyle }}
+        >
           Oceania
         </a>
       </div>

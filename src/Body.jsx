@@ -113,18 +113,18 @@ let Body = () => {
           regionData={(data) => {
             console.log(data + "area");
             if (data === "Increase") {
-              setFilterCountryData(
-                filterCountryData.sort((obj1, obj2) => {
-                  return obj1.area - obj2.area;
-                })
-              );
+              let temp = [...filterCountryData];
+              temp.sort((obj1, obj2) => {
+                return obj1.area - obj2.area;
+              });
+              setFilterCountryData(temp);
             }
             if (data === "Decrease") {
-              setFilterCountryData(
-                filterCountryData.sort((obj1, obj2) => {
-                  return obj2.area - obj1.area;
-                })
-              );
+              let temp = [...filterCountryData];
+              temp.sort((obj1, obj2) => {
+                return obj2.area - obj1.area;
+              });
+              setFilterCountryData(temp);
             }
           }}
         />
@@ -134,18 +134,18 @@ let Body = () => {
           regionData={(data) => {
             console.log(data + "population");
             if (data === "Increase") {
-              setFilterCountryData(
-                filterCountryData.sort((obj1, obj2) => {
-                  return obj1.population - obj2.population;
-                })
-              );
+              let temp = [...filterCountryData];
+              temp.sort((obj1, obj2) => {
+                return obj1.population - obj2.population;
+              });
+              setFilterCountryData(temp);
             }
             if (data === "Decrease") {
-              setFilterCountryData(
-                filterCountryData.sort((obj1, obj2) => {
-                  return obj2.population - obj1.population;
-                })
-              );
+              let temp = [...filterCountryData];
+              temp.sort((obj1, obj2) => {
+                return obj2.population - obj1.population;
+              });
+              setFilterCountryData(temp);
             }
           }}
         />

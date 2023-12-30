@@ -8,6 +8,7 @@ import ShimmerCard from "./ShimmerCard";
 import { DarkMode } from "./main";
 
 let Body = () => {
+  let regionArray = ["Africa", "Americas", "Asia", "Europe", "Oceania"];
   async function fetchCountries() {
     let response = await fetch("https://restcountries.com/v3.1/all");
     let data = await response.json();
@@ -18,14 +19,9 @@ let Body = () => {
   let [countryData, setCountryData] = useState([]);
   let [filterCountryData, setFilterCountryData] = useState([]);
   let [searchText, setSearchText] = useState("");
-  let [filteredRegion, setFilteredRegion] = useState("");
-  if (filteredRegion != null && filteredRegion != "") {
-    filterCountryData = filterCountryData.filter((obj) => {
-      return (
-        obj.region.trim().toLowerCase() === filteredRegion.trim().toLowerCase()
-      );
-    });
-  }
+  let [subRegion, setSubRegion] = useState("");
+  // console.log(subRegion);
+
   let [initialState, setInitialState] = useState(true);
   //   console.log(searchText);
   useEffect(() => {
@@ -96,24 +92,100 @@ let Body = () => {
               }}
               onChange={(e) => {
                 setSearchText(e.target.value);
-                // console.log(searchText);
-                let searchData = countryData.filter((obj) => {
-                  return obj.name.common
-                    .trim()
-                    .toLowerCase()
-                    .includes(e.target.value.trim().toLowerCase());
-                });
-                // console.log(searchData);
-                setFilterCountryData(searchData);
+                if (e.target.value.length != 0) {
+                  // console.log(searchText);
+                  let searchData = countryData.filter((obj) => {
+                    return obj.name.common
+                      .trim()
+                      .toLowerCase()
+                      .includes(e.target.value.trim().toLowerCase());
+                  });
+
+                  setFilterCountryData(searchData);
+                }
               }}
             ></input>
           </div>
         </div>
         <Dropdown
+          name={"Sort By Area"}
+          list={["Increase", "Decrease"]}
+          regionData={(data) => {
+            console.log(data + "area");
+            if (data === "Increase") {
+              setFilterCountryData(
+                filterCountryData.sort((obj1, obj2) => {
+                  return obj1.area - obj2.area;
+                })
+              );
+            }
+            if (data === "Decrease") {
+              setFilterCountryData(
+                filterCountryData.sort((obj1, obj2) => {
+                  return obj2.area - obj1.area;
+                })
+              );
+            }
+          }}
+        />
+        <Dropdown
+          name={"Sort By Population"}
+          list={["Increase", "Decrease"]}
+          regionData={(data) => {
+            console.log(data + "population");
+            if (data === "Increase") {
+              setFilterCountryData(
+                filterCountryData.sort((obj1, obj2) => {
+                  return obj1.population - obj2.population;
+                })
+              );
+            }
+            if (data === "Decrease") {
+              setFilterCountryData(
+                filterCountryData.sort((obj1, obj2) => {
+                  return obj2.population - obj1.population;
+                })
+              );
+            }
+          }}
+        />
+
+        <Dropdown
+          name={"Filter By SubRegion"}
+          list={subRegion}
+          regionData={(data) => {
+            if (data != "" && data != null) {
+              console.log(data);
+              let temp = filterCountryData.filter((obj) => {
+                return (
+                  obj.subregion.trim().toLowerCase() ===
+                  data.trim().toLowerCase()
+                );
+              });
+              setFilterCountryData(temp);
+            }
+          }}
+        />
+        <Dropdown
+          name={"Filter By Region"}
+          list={regionArray}
           regionData={(data) => {
             if (data != "" || data != null) {
+              let subObj = {};
               // console.log(data);
-              setFilteredRegion(data);
+              setFilterCountryData(
+                countryData.filter((obj) => {
+                  if (
+                    obj.region.trim().toLowerCase() ===
+                    data.trim().toLowerCase()
+                  ) {
+                    subObj[obj.subregion] = 1;
+                    return true;
+                  }
+                })
+              );
+
+              setSubRegion(Object.keys(subObj));
             }
           }}
         />

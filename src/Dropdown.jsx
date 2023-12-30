@@ -1,12 +1,13 @@
 import { useState, useContext } from "react";
 import { DarkMode } from "./main";
 
-let Dropdown = ({ regionData }) => {
+let Dropdown = ({ regionData, list, name }) => {
   let darkValue = useContext(DarkMode);
   let darkStyle = {
     backgroundColor: "white",
     color: "hsl(200, 15%, 8%)",
   };
+
   if (darkValue === "dark") {
     darkStyle.backgroundColor = "hsl(209, 23%, 22%)";
     darkStyle.color = "white";
@@ -28,7 +29,7 @@ let Dropdown = ({ regionData }) => {
           }
         }}
       >
-        Filter by Region <i className="bi bi-caret-down-fill"></i>
+        {name} <i className="bi bi-caret-down-fill"></i>
       </button>
       <div
         className="list bg-white "
@@ -38,36 +39,16 @@ let Dropdown = ({ regionData }) => {
           regionData(e.target.innerHTML);
         }}
       >
-        <a
-          className="ps-4  text-decoration-none"
-          style={{ ...styObj, ...darkStyle }}
-        >
-          Africa
-        </a>
-        <a
-          className="ps-4  text-decoration-none"
-          style={{ ...styObj, ...darkStyle }}
-        >
-          Americas
-        </a>
-        <a
-          className="ps-4  text-decoration-none"
-          style={{ ...styObj, ...darkStyle }}
-        >
-          Asia
-        </a>
-        <a
-          className="ps-4  text-decoration-none"
-          style={{ ...styObj, ...darkStyle }}
-        >
-          Europe
-        </a>
-        <a
-          className="ps-4  text-decoration-none"
-          style={{ ...styObj, ...darkStyle }}
-        >
-          Oceania
-        </a>
+        {Array.isArray(list) &&
+          list.map((eachList, index) => (
+            <a
+              key={index}
+              className="ps-4 text-decoration-none"
+              style={{ ...styObj, ...darkStyle }}
+            >
+              {eachList}
+            </a>
+          ))}
       </div>
     </div>
   );

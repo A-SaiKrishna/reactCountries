@@ -20,8 +20,10 @@ let Body = () => {
   let [filterCountryData, setFilterCountryData] = useState([]);
   let [searchText, setSearchText] = useState("");
   let [subRegion, setSubRegion] = useState("");
+  let [filterRegion, setFilterRegion] = useState("");
+  let [subFilterCountryData, setSubFilterCountryData] = useState([]);
   // console.log(subRegion);
-
+  //  subFilterCountryData
   let [initialState, setInitialState] = useState(true);
   //   console.log(searchText);
   useEffect(() => {
@@ -94,14 +96,14 @@ let Body = () => {
                 setSearchText(e.target.value);
                 if (e.target.value.length != 0) {
                   // console.log(searchText);
-                  let searchData = countryData.filter((obj) => {
+                  let searchData = filterCountryData.filter((obj) => {
                     return obj.name.common
                       .trim()
                       .toLowerCase()
                       .includes(e.target.value.trim().toLowerCase());
                   });
 
-                  setFilterCountryData(searchData);
+                  // setFilterCountryData(searchData);
                 }
               }}
             ></input>
@@ -112,20 +114,18 @@ let Body = () => {
           list={["Increase", "Decrease"]}
           regionData={(data) => {
             console.log(data + "area");
-            if (data === "Increase") {
-              let temp = [...filterCountryData];
-              temp.sort((obj1, obj2) => {
-                return obj1.area - obj2.area;
-              });
-              setFilterCountryData(temp);
-            }
-            if (data === "Decrease") {
-              let temp = [...filterCountryData];
-              temp.sort((obj1, obj2) => {
-                return obj2.area - obj1.area;
-              });
-              setFilterCountryData(temp);
-            }
+            let temp =
+              subFilterCountryData.length === 0
+                ? [...filterCountryData]
+                : [...subFilterCountryData];
+            temp.sort((obj1, obj2) => {
+              return data === "Increase"
+                ? obj1.area - obj2.area
+                : obj2.area - obj1.area;
+            });
+            subFilterCountryData.length === 0
+              ? setFilterCountryData(temp)
+              : setSubFilterCountryData(temp);
           }}
         />
         <Dropdown
@@ -133,20 +133,18 @@ let Body = () => {
           list={["Increase", "Decrease"]}
           regionData={(data) => {
             console.log(data + "population");
-            if (data === "Increase") {
-              let temp = [...filterCountryData];
-              temp.sort((obj1, obj2) => {
-                return obj1.population - obj2.population;
-              });
-              setFilterCountryData(temp);
-            }
-            if (data === "Decrease") {
-              let temp = [...filterCountryData];
-              temp.sort((obj1, obj2) => {
-                return obj2.population - obj1.population;
-              });
-              setFilterCountryData(temp);
-            }
+            let temp =
+              subFilterCountryData.length === 0
+                ? [...filterCountryData]
+                : [...subFilterCountryData];
+            temp.sort((obj1, obj2) => {
+              return data === "Increase"
+                ? obj1.population - obj2.population
+                : obj2.population - obj1.population;
+            });
+            subFilterCountryData.length === 0
+              ? setFilterCountryData(temp)
+              : setSubFilterCountryData(temp);
           }}
         />
 
@@ -155,14 +153,13 @@ let Body = () => {
           list={subRegion}
           regionData={(data) => {
             if (data != "" && data != null) {
-              console.log(data);
               let temp = filterCountryData.filter((obj) => {
                 return (
                   obj.subregion.trim().toLowerCase() ===
                   data.trim().toLowerCase()
                 );
               });
-              setFilterCountryData(temp);
+              setSubFilterCountryData(temp);
             }
           }}
         />
@@ -170,9 +167,11 @@ let Body = () => {
           name={"Filter By Region"}
           list={regionArray}
           regionData={(data) => {
-            if (data != "" || data != null) {
+            if (data != "" && data != null && data != filterRegion) {
               let subObj = {};
               // console.log(data);
+              setFilterRegion(data);
+              // console.log(filterRegion.length);
               setFilterCountryData(
                 countryData.filter((obj) => {
                   if (
@@ -206,8 +205,12 @@ let Body = () => {
           ) : (
             <h1 className="m-5">No data found</h1>
           )
-        ) : (
+        ) : subFilterCountryData.length === 0 ? (
           filterCountryData.map((obj) => {
+            return <EachCard country={obj} />;
+          })
+        ) : (
+          subFilterCountryData.map((obj) => {
             return <EachCard country={obj} />;
           })
         )}

@@ -15,22 +15,19 @@ let Body = () => {
     return data;
   }
   //   console.log(data);
+
   let darkValue = useContext(DarkMode);
-  let [countryData, setCountryData] = useState([]);
-  let [filterCountryData, setFilterCountryData] = useState([]);
   let [searchText, setSearchText] = useState("");
-  let [subRegion, setSubRegion] = useState("");
-  let [filterRegion, setFilterRegion] = useState("");
-  let [subFilterCountryData, setSubFilterCountryData] = useState([]);
-  // console.log(subRegion);
-  //  subFilterCountryData
-  let [initialState, setInitialState] = useState(true);
-  //   console.log(searchText);
+  let [subRegionArray, setSubRegionArray] = useState([]);
+  let [initialCountryData, setInitialCountryData] = useState([]);
+  let [regionFilter, setRegionFilter] = useState("");
+  let [subRegionFilter, setSubRegionFilter] = useState("");
+  let [populationFilter, setPopulationFilter] = useState("");
+  let [areaFilter, setAreaFilter] = useState("");
+
   useEffect(() => {
     fetchCountries().then((data) => {
-      setCountryData(data);
-      setFilterCountryData(data);
-      setInitialState(false);
+      setInitialCountryData(data);
     });
   }, []);
   let bodyStyle = {
@@ -93,126 +90,105 @@ let Body = () => {
                 boxShadow: "inset 0 0 5px rgba(0, 0, 0, 0.5)",
               }}
               onChange={(e) => {
+                console.log(e.target.value);
                 setSearchText(e.target.value);
-                if (e.target.value.length != 0) {
-                  // console.log(searchText);
-                  let searchData = filterCountryData.filter((obj) => {
-                    return obj.name.common
-                      .trim()
-                      .toLowerCase()
-                      .includes(e.target.value.trim().toLowerCase());
-                  });
-
-                  // setFilterCountryData(searchData);
-                }
               }}
             ></input>
           </div>
         </div>
         <Dropdown
           name={"Sort By Area"}
-          list={["Increase", "Decrease"]}
+          list={["increase", "decrease"]}
           regionData={(data) => {
-            console.log(data + "area");
-            let temp =
-              subFilterCountryData.length === 0
-                ? [...filterCountryData]
-                : [...subFilterCountryData];
-            temp.sort((obj1, obj2) => {
-              return data === "Increase"
-                ? obj1.area - obj2.area
-                : obj2.area - obj1.area;
-            });
-            subFilterCountryData.length === 0
-              ? setFilterCountryData(temp)
-              : setSubFilterCountryData(temp);
+            setPopulationFilter("");
+            setAreaFilter(data);
           }}
         />
         <Dropdown
           name={"Sort By Population"}
-          list={["Increase", "Decrease"]}
+          list={["increase", "decrease"]}
           regionData={(data) => {
-            console.log(data + "population");
-            let temp =
-              subFilterCountryData.length === 0
-                ? [...filterCountryData]
-                : [...subFilterCountryData];
-            temp.sort((obj1, obj2) => {
-              return data === "Increase"
-                ? obj1.population - obj2.population
-                : obj2.population - obj1.population;
-            });
-            subFilterCountryData.length === 0
-              ? setFilterCountryData(temp)
-              : setSubFilterCountryData(temp);
+            setAreaFilter("");
+            setPopulationFilter(data);
           }}
         />
-
         <Dropdown
           name={"Filter By SubRegion"}
-          list={subRegion}
+          list={subRegionArray}
           regionData={(data) => {
-            if (data != "" && data != null) {
-              let temp = filterCountryData.filter((obj) => {
-                return (
-                  obj.subregion.trim().toLowerCase() ===
-                  data.trim().toLowerCase()
-                );
-              });
-              setSubFilterCountryData(temp);
-            }
+            setSubRegionFilter(data);
           }}
         />
         <Dropdown
           name={"Filter By Region"}
           list={regionArray}
           regionData={(data) => {
-            if (data != "" && data != null && data != filterRegion) {
-              let subObj = {};
-              // console.log(data);
-              setFilterRegion(data);
-              // console.log(filterRegion.length);
-              setFilterCountryData(
-                countryData.filter((obj) => {
-                  if (
-                    obj.region.trim().toLowerCase() ===
-                    data.trim().toLowerCase()
-                  ) {
-                    subObj[obj.subregion] = 1;
-                    return true;
-                  }
-                })
-              );
-
-              setSubRegion(Object.keys(subObj));
-            }
+            setRegionFilter(data);
+            let subObj = {};
+            initialCountryData.forEach((element) => {
+              if (
+                element.region.trim().toLowerCase() ===
+                data.trim().toLowerCase()
+              )
+                subObj[element.subregion] = 1;
+            });
+            setSubRegionArray(Object.keys(subObj));
           }}
         />
       </div>
-      <div className="restCountries row ">
-        {filterCountryData.length === 0 ? (
-          initialState === true ? (
-            <div className="row">
-              <ShimmerCard />
-              <ShimmerCard />
-              <ShimmerCard />
-              <ShimmerCard />
-              <ShimmerCard />
-              <ShimmerCard />
-              <ShimmerCard />
-              <ShimmerCard />
-            </div>
-          ) : (
-            <h1 className="m-5">No data found</h1>
-          )
-        ) : subFilterCountryData.length === 0 ? (
-          filterCountryData.map((obj) => {
-            return <EachCard country={obj} />;
-          })
+      <div className="restCountries row">
+        {initialCountryData.length !== 0 ? (
+          initialCountryData
+            .filter((country) =>
+              country.name.common
+                .toLowerCase()
+                .includes(searchText.toLowerCase())
+            )
+            .filter((country) => {
+              if (regionFilter) {
+                return (
+                  country.region.trim().toLowerCase() ===
+                  regionFilter.trim().toLowerCase()
+                );
+              }
+              return true;
+            })
+            .filter((country) => {
+              if (subRegionFilter) {
+                return (
+                  country.subregion.trim().toLowerCase() ===
+                  subRegionFilter.trim().toLowerCase()
+                );
+              }
+              return true;
+            })
+
+            .sort((obj1, obj2) => {
+              return populationFilter
+                ? populationFilter === "increase"
+                  ? obj1.population - obj2.population
+                  : obj2.population - obj1.population
+                : 0;
+            })
+            .sort((obj1, obj2) => {
+              return areaFilter
+                ? areaFilter === "increase"
+                  ? obj1.area - obj2.area
+                  : obj2.area - obj1.area
+                : 0;
+            })
+            .map((obj) => <EachCard key={obj.cca3} country={obj} />)
         ) : (
-          subFilterCountryData.map((obj) => {
-            return <EachCard country={obj} />;
-          })
+          <div className="row">
+            <ShimmerCard />
+            <ShimmerCard />
+            <ShimmerCard />
+            <ShimmerCard />
+            <ShimmerCard />
+            <ShimmerCard />
+            <ShimmerCard />
+            <ShimmerCard />
+          </div>
         )}
       </div>
     </div>

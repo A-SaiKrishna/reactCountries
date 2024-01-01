@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ShimmerCard from "./ShimmerCard";
+import ShimmerCountry from "./ShimmerCountry";
 import BorderCountry from "./BorderCountry";
 import { Link } from "react-router-dom";
 import "./Country.css";
@@ -24,7 +24,7 @@ let Country = () => {
     });
   }, [countryId]);
   if (countryData === "") {
-    return <ShimmerCard />;
+    return <ShimmerCountry />;
   }
   let {
     name,
@@ -129,15 +129,21 @@ let Country = () => {
               <span style={{ ...darkStyle, fontWeight: "500" }}>
                 Border Countries:
               </span>{" "}
-              {borders.map((eachCountry) => {
-                return (
-                  <BorderCountry
-                    key={eachCountry}
-                    code={eachCountry}
-                    className={buttons}
-                  />
-                );
-              })}
+              {borders ? (
+                borders.map((eachCountry) => {
+                  return (
+                    <BorderCountry
+                      key={eachCountry}
+                      code={eachCountry}
+                      className={buttons}
+                    />
+                  );
+                })
+              ) : (
+                <span className=" mx-1 shadow" style={darkStyle}>
+                  No border countries
+                </span>
+              )}
             </span>
           </div>
         </div>

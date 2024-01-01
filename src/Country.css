@@ -1,0 +1,27 @@
+#flag {
+  height: 80%;
+  width: 75%;
+}
+.country-details {
+  width: 50%;
+}
+.img-div {
+  width: 50%;
+}
+li {
+  margin: 6px 0;
+}
+.backbutton {
+  width: 8%;
+  height: 2.5rem;
+}
+
+/* ul li span {
+  color: black;
+} */
+.border-countries span span {
+  color: black;
+}
+.country {
+  height: 100vh;
+}

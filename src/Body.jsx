@@ -6,6 +6,8 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import Dropdown from "./Dropdown";
 import ShimmerCard from "./ShimmerCard";
 import { DarkMode } from "./main";
+import { Link } from "react-router-dom";
+import "./Body.css";
 
 let Body = () => {
   let regionArray = ["Africa", "Americas", "Asia", "Europe", "Oceania"];
@@ -177,7 +179,16 @@ let Body = () => {
                   : obj2.area - obj1.area
                 : 0;
             })
-            .map((obj) => <EachCard key={obj.cca3} country={obj} />)
+            .map((obj) => (
+              <div
+                className="col-md-3 d-flex justify-content-center my-5"
+                key={obj.cca3}
+              >
+                <Link to={`/country/${obj.cca3}`} className="linker">
+                  <EachCard country={obj} />
+                </Link>
+              </div>
+            ))
         ) : (
           <div className="row">
             <ShimmerCard />

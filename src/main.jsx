@@ -6,6 +6,7 @@ import Body from "./Body";
 import { createContext, useState } from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import Country from "./Country";
+import Error from "./Error";
 export let DarkMode = createContext(null);
 const App = () => {
   let [darkState, setDarkState] = useState("light");
@@ -40,6 +41,7 @@ let appRouter = createBrowserRouter([
         element: <Country />,
       },
     ],
+    errorElement: <Error />,
   },
 ]);
 let root = ReactDOM.createRoot(document.getElementById("root"));

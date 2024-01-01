@@ -20,9 +20,9 @@ let Country = () => {
   useEffect(() => {
     fetchingCountry().then((data) => {
       setCountryData(data[0]);
-      console.log(data);
+      //   console.log(data);
     });
-  }, [countryId]);
+  }, [countryData]);
   if (countryData === "") {
     return <ShimmerCountry />;
   }

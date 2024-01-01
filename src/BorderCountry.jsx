@@ -27,7 +27,7 @@ let BorderCountry = ({ code }) => {
   return !countryName ? (
     <div> loading </div>
   ) : (
-    <div className="btn btn-light mx-1 shadow" style={darkStyle}>
+    <div className="btn btn-light mx-1 shadow mb-2" style={darkStyle}>
       <Link
         to={`/country/${countryName[0].cca3}`}
         className="text-decoration-none "

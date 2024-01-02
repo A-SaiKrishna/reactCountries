@@ -65,7 +65,7 @@ let Body = () => {
   }
   return (
     <div className="body" style={bodyStyle}>
-      <div className="filter-class mt-5  d-flex justify-content-between py-auto">
+      <div className="filter-class mt-5  d-flex justify-content-between py-auto flex-wrap">
         <div className="search" style={searchStyle}>
           <div className="input-group">
             <div className="input-group-prepend">
@@ -105,6 +105,7 @@ let Body = () => {
             setPopulationFilter("");
             setAreaFilter(data);
           }}
+          className="drop-downarea"
         />
         <Dropdown
           name={"Sort By Population"}
@@ -113,6 +114,7 @@ let Body = () => {
             setAreaFilter("");
             setPopulationFilter(data);
           }}
+          className="drop-down"
         />
         <Dropdown
           name={"Filter By SubRegion"}
@@ -120,6 +122,7 @@ let Body = () => {
           regionData={(data) => {
             setSubRegionFilter(data);
           }}
+          className="drop-down"
         />
         <Dropdown
           name={"Filter By Region"}
@@ -136,6 +139,7 @@ let Body = () => {
             });
             setSubRegionArray(Object.keys(subObj));
           }}
+          className="drop-down"
         />
       </div>
       <div className="restCountries row">

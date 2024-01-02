@@ -3,3 +3,13 @@
   /* display: inline; */
   /* display: none; */
 }
+@media (max-width: 768px) {
+  div.drop {
+    width: 100% !important;
+    margin-bottom: 3rem;
+  }
+  .search {
+    width: 100% !important;
+    margin-bottom: 3rem;
+  }
+}

@@ -15,9 +15,23 @@ let Dropdown = ({ regionData, list, name }) => {
   let [styObj, setStyObj] = useState({
     display: "none",
   });
-  let Style = { height: "1rem", width: "20%", position: "relative" };
+  let Style = {
+    height: "1rem",
+    width: "20%",
+    position: "relative",
+    zIndex: "1",
+  };
+  if (name === "Sort By Area") {
+    Style.zIndex = "4";
+  }
+  if (name === "Sort By Population") {
+    Style.zIndex = "3";
+  }
+  if (name === "Filter By SubRegion") {
+    Style.zIndex = "2";
+  }
   return (
-    <div className="drop z-1" style={Style}>
+    <div className="drop" style={Style}>
       <button
         className="btn-primary border-0 shadow "
         style={{ height: "3rem", width: "100%", ...darkStyle }}

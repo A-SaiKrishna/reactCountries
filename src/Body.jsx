@@ -65,7 +65,7 @@ let Body = () => {
   }
   return (
     <div className="body" style={bodyStyle}>
-      <div className="filter-class mt-5  d-flex justify-content-between py-auto flex-wrap">
+      <div className="filter-class mt-5  d-flex justify-content-between py-auto">
         <div className="search" style={searchStyle}>
           <div className="input-group">
             <div className="input-group-prepend">

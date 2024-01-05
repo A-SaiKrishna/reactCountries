@@ -63,6 +63,44 @@ let Body = () => {
     lightDark.color = "white";
     bodyStyle.border = "none";
   }
+  let answer = initialCountryData
+    .filter((country) =>
+      country.name.common.toLowerCase().includes(searchText.toLowerCase())
+    )
+    .filter((country) => {
+      if (regionFilter) {
+        return (
+          country.region.trim().toLowerCase() ===
+          regionFilter.trim().toLowerCase()
+        );
+      }
+      return true;
+    })
+    .filter((country) => {
+      if (subRegionFilter) {
+        return (
+          country.subregion.trim().toLowerCase() ===
+          subRegionFilter.trim().toLowerCase()
+        );
+      }
+      return true;
+    })
+
+    .sort((obj1, obj2) => {
+      return populationFilter
+        ? populationFilter === "increase"
+          ? obj1.population - obj2.population
+          : obj2.population - obj1.population
+        : 0;
+    })
+    .sort((obj1, obj2) => {
+      return areaFilter
+        ? areaFilter === "increase"
+          ? obj1.area - obj2.area
+          : obj2.area - obj1.area
+        : 0;
+    });
+
   return (
     <div className="body" style={bodyStyle}>
       <div className="filter-class mt-5  d-flex justify-content-between py-auto">
@@ -144,46 +182,8 @@ let Body = () => {
       </div>
       <div className="restCountries row">
         {initialCountryData.length !== 0 ? (
-          initialCountryData
-            .filter((country) =>
-              country.name.common
-                .toLowerCase()
-                .includes(searchText.toLowerCase())
-            )
-            .filter((country) => {
-              if (regionFilter) {
-                return (
-                  country.region.trim().toLowerCase() ===
-                  regionFilter.trim().toLowerCase()
-                );
-              }
-              return true;
-            })
-            .filter((country) => {
-              if (subRegionFilter) {
-                return (
-                  country.subregion.trim().toLowerCase() ===
-                  subRegionFilter.trim().toLowerCase()
-                );
-              }
-              return true;
-            })
-
-            .sort((obj1, obj2) => {
-              return populationFilter
-                ? populationFilter === "increase"
-                  ? obj1.population - obj2.population
-                  : obj2.population - obj1.population
-                : 0;
-            })
-            .sort((obj1, obj2) => {
-              return areaFilter
-                ? areaFilter === "increase"
-                  ? obj1.area - obj2.area
-                  : obj2.area - obj1.area
-                : 0;
-            })
-            .map((obj) => (
+          answer.length != 0 ? (
+            answer.map((obj) => (
               <div
                 className="col-md-3 d-flex justify-content-center my-5"
                 key={obj.cca3}
@@ -193,8 +193,15 @@ let Body = () => {
                 </Link>
               </div>
             ))
+          ) : (
+            <div className="text-center m-5">
+              <h1 className="m-5">No Data Found</h1>
+            </div>
+          )
         ) : (
           <div className="row">
+            <ShimmerCard />
+            <ShimmerCard />
             <ShimmerCard />
             <ShimmerCard />
             <ShimmerCard />
